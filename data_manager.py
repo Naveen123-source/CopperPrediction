@@ -186,6 +186,7 @@ class DataManager:
             "copper_pct_change": pct_change,
             "copper_volume": int(latest.get("Copper_Volume", 0)),
             "copper_stock": int(latest.get("LME_Stocks", 0)),
+            "lme_stocks": int(latest.get("LME_Stocks", 0)),
             "crude_oil": float(latest.get("Crude_Oil", 0.0)),
             "dxy_index": float(latest.get("DXY_Index", 0.0)),
             "interest_rate": float(latest.get("Interest_Rate", 0.0)),

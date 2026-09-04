@@ -14,7 +14,7 @@
     <!-- Chart.js for High Performance Financial Visualizations -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=9">
 </head>
 <body>
     <div class="app-container">
@@ -142,6 +142,16 @@
                     <div class="panel-subtitle">Direct multi-horizon models, chronological splits, and metric-specific tuning</div>
                 </div>
 
+                <!-- UI Enhancement (Added) — Usability Layer: Run Presets Bar -->
+                <div class="run-presets-bar" id="preset-chips-list">
+                    <span class="preset-label">⚡ RUN PRESETS:</span>
+                    <button type="button" class="preset-chip active" data-preset="quick-check" title="Fast test on 1-7 days with top gradient tree models">Quick Daily Check (1-7D)</button>
+                    <button type="button" class="preset-chip" data-preset="full-sweep" title="Full multi-horizon evaluation across all 9 models and 1-90 days">Full 90-Day Sweep</button>
+                    <button type="button" class="preset-chip" data-preset="mae-priority" title="MAE-focused setup on top 4 models across all horizons">All Models · MAE Priority</button>
+                    <button type="button" class="preset-chip" data-preset="direction-conviction" title="Directional Accuracy optimization on tree and stacking models">Directional Conviction</button>
+                    <button type="button" class="preset-chip btn-add-preset" id="btn-save-custom-preset" title="Save Current Configuration as Preset">+ Save as Preset</button>
+                </div>
+
                 <div class="config-grid">
                     <!-- Column 1: Model Selection Multi-Select -->
                     <div class="config-col">
@@ -160,15 +170,52 @@
                                     <span class="opt-text font-bold">☑ Select All Models</span>
                                 </label>
                                 <div class="opt-divider"></div>
-                                <label class="select-option"><input type="checkbox" name="model-chk" value="XGBoost" checked><span>XGBoost</span></label>
-                                <label class="select-option"><input type="checkbox" name="model-chk" value="CatBoost" checked><span>CatBoost</span></label>
-                                <label class="select-option"><input type="checkbox" name="model-chk" value="LightGBM" checked><span>LightGBM</span></label>
-                                <label class="select-option"><input type="checkbox" name="model-chk" value="RandomForest" checked><span>RandomForest</span></label>
-                                <label class="select-option"><input type="checkbox" name="model-chk" value="Stacking Ensemble" checked><span>Stacking Ensemble</span></label>
-                                <label class="select-option"><input type="checkbox" name="model-chk" value="Stage Regression" checked><span>Stage Regression</span></label>
-                                <label class="select-option"><input type="checkbox" name="model-chk" value="ARIMA" checked><span>ARIMA</span></label>
-                                <label class="select-option"><input type="checkbox" name="model-chk" value="SARIMAX" checked><span>SARIMAX</span></label>
-                                <label class="select-option"><input type="checkbox" name="model-chk" value="LSTM" checked><span>LSTM</span></label>
+                                <label class="select-option">
+                                    <input type="checkbox" name="model-chk" value="XGBoost" checked>
+                                    <span>XGBoost</span>
+                                    <span class="chip-badge-rec">★ Best</span>
+                                    <span class="info-tip-btn" data-tooltip="XGBoost: Extreme Gradient Boosting with regularization, optimal for capturing nonlinear interactions in commodity curves." tabindex="0" role="button" aria-label="XGBoost info">ⓘ</span>
+                                </label>
+                                <label class="select-option">
+                                    <input type="checkbox" name="model-chk" value="CatBoost" checked>
+                                    <span>CatBoost</span>
+                                    <span class="info-tip-btn" data-tooltip="CatBoost: Gradient boosted decision trees with symmetric trees and ordered boosting to prevent target leakage." tabindex="0" role="button" aria-label="CatBoost info">ⓘ</span>
+                                </label>
+                                <label class="select-option">
+                                    <input type="checkbox" name="model-chk" value="LightGBM" checked>
+                                    <span>LightGBM</span>
+                                    <span class="info-tip-btn" data-tooltip="LightGBM: Fast histogram-based gradient boosting optimized for high-dimensional historical time-series." tabindex="0" role="button" aria-label="LightGBM info">ⓘ</span>
+                                </label>
+                                <label class="select-option">
+                                    <input type="checkbox" name="model-chk" value="RandomForest" checked>
+                                    <span>RandomForest</span>
+                                    <span class="info-tip-btn" data-tooltip="RandomForest: Ensemble of bootstrap aggregated decision trees providing low-variance baselines." tabindex="0" role="button" aria-label="RandomForest info">ⓘ</span>
+                                </label>
+                                <label class="select-option">
+                                    <input type="checkbox" name="model-chk" value="Stacking Ensemble" checked>
+                                    <span>Stacking Ensemble</span>
+                                    <span class="info-tip-btn" data-tooltip="Stacking Ensemble: Meta-regressor combining multiple base models via out-of-fold predictions." tabindex="0" role="button" aria-label="Stacking Ensemble info">ⓘ</span>
+                                </label>
+                                <label class="select-option">
+                                    <input type="checkbox" name="model-chk" value="Stage Regression" checked>
+                                    <span>Stage Regression</span>
+                                    <span class="info-tip-btn" data-tooltip="Stage Regression: Multi-stage sequential cascade predicting trend components first, then residuals." tabindex="0" role="button" aria-label="Stage Regression info">ⓘ</span>
+                                </label>
+                                <label class="select-option">
+                                    <input type="checkbox" name="model-chk" value="ARIMA" checked>
+                                    <span>ARIMA</span>
+                                    <span class="info-tip-btn" data-tooltip="ARIMA: Autoregressive Integrated Moving Average classical econometric benchmark." tabindex="0" role="button" aria-label="ARIMA info">ⓘ</span>
+                                </label>
+                                <label class="select-option">
+                                    <input type="checkbox" name="model-chk" value="SARIMAX" checked>
+                                    <span>SARIMAX</span>
+                                    <span class="info-tip-btn" data-tooltip="SARIMAX: Seasonal ARIMA supporting exogenous causal macroeconomic covariates." tabindex="0" role="button" aria-label="SARIMAX info">ⓘ</span>
+                                </label>
+                                <label class="select-option">
+                                    <input type="checkbox" name="model-chk" value="LSTM" checked>
+                                    <span>LSTM</span>
+                                    <span class="info-tip-btn" data-tooltip="LSTM: Recurrent deep neural network modeling multi-step temporal dependencies across rolling sequences." tabindex="0" role="button" aria-label="LSTM info">ⓘ</span>
+                                </label>
                             </div>
                         </div>
                     </div>
@@ -190,17 +237,61 @@
                                     <span class="opt-text font-bold">Select All Metrics</span>
                                 </label>
                                 <div class="opt-divider"></div>
-                                <label class="select-option"><input type="checkbox" name="metric-chk" value="MAE" checked><span>MAE (Mean Absolute Error)</span></label>
-                                <label class="select-option"><input type="checkbox" name="metric-chk" value="RMSE" checked><span>RMSE (Root Mean Sq Error)</span></label>
-                                <label class="select-option"><input type="checkbox" name="metric-chk" value="MAPE"><span>MAPE (% Error)</span></label>
-                                <label class="select-option"><input type="checkbox" name="metric-chk" value="sMAPE"><span>sMAPE (Symmetric MAPE)</span></label>
-                                <label class="select-option"><input type="checkbox" name="metric-chk" value="R²"><span>R² (Coefficient of Fit)</span></label>
-                                <label class="select-option"><input type="checkbox" name="metric-chk" value="Mean Error (Bias)"><span>Mean Error (Bias)</span></label>
-                                <label class="select-option"><input type="checkbox" name="metric-chk" value="Directional Accuracy"><span>Directional Accuracy (%)</span></label>
-                                <label class="select-option"><input type="checkbox" name="metric-chk" value="UP Accuracy"><span>UP Accuracy (%)</span></label>
-                                <label class="select-option"><input type="checkbox" name="metric-chk" value="DOWN Accuracy"><span>DOWN Accuracy (%)</span></label>
-                                <label class="select-option"><input type="checkbox" name="metric-chk" value="Max Absolute Error"><span>Max Absolute Error</span></label>
-                                <label class="select-option"><input type="checkbox" name="metric-chk" value="Error Std Dev"><span>Error Std Dev</span></label>
+                                <label class="select-option">
+                                    <input type="checkbox" name="metric-chk" value="MAE" checked>
+                                    <span>MAE (Mean Absolute Error)</span>
+                                    <span class="info-tip-btn" data-tooltip="MAE: Mean Absolute Error in dollars ($). Measures average error magnitude without disproportionately penalizing outliers." tabindex="0" role="button" aria-label="MAE info">ⓘ</span>
+                                </label>
+                                <label class="select-option">
+                                    <input type="checkbox" name="metric-chk" value="RMSE" checked>
+                                    <span>RMSE (Root Mean Sq Error)</span>
+                                    <span class="info-tip-btn" data-tooltip="RMSE: Root Mean Squared Error ($). Penalizes large forecast misses heavily, critical for risk management." tabindex="0" role="button" aria-label="RMSE info">ⓘ</span>
+                                </label>
+                                <label class="select-option">
+                                    <input type="checkbox" name="metric-chk" value="MAPE">
+                                    <span>MAPE (% Error)</span>
+                                    <span class="info-tip-btn" data-tooltip="MAPE: Mean Absolute Percentage Error. Error relative to price level, facilitating comparisons across regimes." tabindex="0" role="button" aria-label="MAPE info">ⓘ</span>
+                                </label>
+                                <label class="select-option">
+                                    <input type="checkbox" name="metric-chk" value="sMAPE">
+                                    <span>sMAPE (Symmetric MAPE)</span>
+                                    <span class="info-tip-btn" data-tooltip="sMAPE: Symmetric percentage error bounded between 0% and 200%, avoiding zero-division bias." tabindex="0" role="button" aria-label="sMAPE info">ⓘ</span>
+                                </label>
+                                <label class="select-option">
+                                    <input type="checkbox" name="metric-chk" value="R²">
+                                    <span>R² (Coefficient of Fit)</span>
+                                    <span class="info-tip-btn" data-tooltip="R²: Proportion of target price variation explained by the direct forecasting model." tabindex="0" role="button" aria-label="R2 info">ⓘ</span>
+                                </label>
+                                <label class="select-option">
+                                    <input type="checkbox" name="metric-chk" value="Mean Error (Bias)">
+                                    <span>Mean Error (Bias)</span>
+                                    <span class="info-tip-btn" data-tooltip="Bias: Average prediction error (y_pred - y_true). Detects systematic over- or under-estimation." tabindex="0" role="button" aria-label="Bias info">ⓘ</span>
+                                </label>
+                                <label class="select-option">
+                                    <input type="checkbox" name="metric-chk" value="Directional Accuracy">
+                                    <span>Directional Accuracy (%)</span>
+                                    <span class="info-tip-btn" data-tooltip="Directional Accuracy: Percentage of periods where the model correctly predicted price movement sign." tabindex="0" role="button" aria-label="Directional Accuracy info">ⓘ</span>
+                                </label>
+                                <label class="select-option">
+                                    <input type="checkbox" name="metric-chk" value="UP Accuracy">
+                                    <span>UP Accuracy (%)</span>
+                                    <span class="info-tip-btn" data-tooltip="UP Accuracy: Precision specifically when the physical market moved upward." tabindex="0" role="button" aria-label="UP Accuracy info">ⓘ</span>
+                                </label>
+                                <label class="select-option">
+                                    <input type="checkbox" name="metric-chk" value="DOWN Accuracy">
+                                    <span>DOWN Accuracy (%)</span>
+                                    <span class="info-tip-btn" data-tooltip="DOWN Accuracy: Precision specifically when the physical market moved downward." tabindex="0" role="button" aria-label="DOWN Accuracy info">ⓘ</span>
+                                </label>
+                                <label class="select-option">
+                                    <input type="checkbox" name="metric-chk" value="Max Absolute Error">
+                                    <span>Max Absolute Error</span>
+                                    <span class="info-tip-btn" data-tooltip="Max Error: The worst-case single forecast deviation observed in test sets." tabindex="0" role="button" aria-label="Max Error info">ⓘ</span>
+                                </label>
+                                <label class="select-option">
+                                    <input type="checkbox" name="metric-chk" value="Error Std Dev">
+                                    <span>Error Std Dev</span>
+                                    <span class="info-tip-btn" data-tooltip="Error Std Dev: Standard deviation of residuals, measuring forecast consistency and dispersion." tabindex="0" role="button" aria-label="Error Std Dev info">ⓘ</span>
+                                </label>
                             </div>
                         </div>
                     </div>
@@ -429,6 +520,11 @@
                                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
                                 <span>Reset</span>
                             </button>
+                            <!-- UI Enhancement (Added) — Visual Clarity Layer: Keyboard shortcut hint -->
+                            <div class="keyboard-shortcut-hint" id="shortcut-hint-box" title="Tip: Press + / - keys to zoom and ← / → arrow keys to pan">
+                                <span>⌨ + / - Zoom • ← / → Pan</span>
+                                <button type="button" class="btn-dismiss-hint" id="btn-dismiss-shortcut-hint" title="Dismiss" style="background:none;border:none;color:var(--text-muted);cursor:pointer;margin-left:6px;font-size:10px;">✕</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -558,6 +654,23 @@
                         <button class="view-btn" id="btn-view-matrix" title="Comparison Matrix View">Matrix View</button>
                     </div>
 
+                    <!-- UI Enhancement (Added) — Density Management Layer: Column Visibility Picker -->
+                    <div class="col-picker-wrapper" id="col-picker-wrapper">
+                        <button type="button" class="btn btn-outline btn-sm" id="btn-col-picker-toggle" title="Select Visible Columns">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3h7a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-7m0-18H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h7m0-18v18"></path></svg>
+                            <span>Columns ▾</span>
+                        </button>
+                        <div class="col-picker-menu" id="col-picker-dropdown" style="display: none;">
+                            <div class="col-picker-header">
+                                <span>Visible Columns</span>
+                                <button type="button" class="btn-micro" id="btn-col-reset-default">Reset Default</button>
+                            </div>
+                            <div class="col-picker-list" id="col-picker-checkboxes">
+                                <!-- Populated dynamically with all 20 columns -->
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Global Actual Data Upload Button (Single Global Upload) -->
                     <div class="global-actual-upload-wrapper">
                         <label class="btn btn-primary-accent btn-global-actual-upload" for="global-actual-upload" id="label-global-actual-upload" title="Upload Actual Market Data (.csv, .xlsx) to evaluate all models & horizons">
@@ -679,8 +792,549 @@
             </div>
         </section>
 
+        <!-- ========================================================================= -->
+        <!-- SOURCE 2: ANTIGRAVITY FORECAST IMPROVEMENT LAB SECTION                      -->
+        <!-- ========================================================================= -->
+        <section class="improvement-lab-section" id="improvement-lab-section" aria-label="Forecast Improvement Lab">
+            <div class="lab-header-banner">
+                <div class="lab-title-group">
+                    <div class="lab-badge-row">
+                        <span class="badge-tag" style="background: rgba(6, 182, 212, 0.15); border-color: var(--accent-cyan); color: var(--accent-cyan);">ANTIGRAVITY IMPROVEMENT LAB</span>
+                        <span class="badge-tag" style="background: rgba(16, 185, 129, 0.15); border-color: var(--accent-green); color: var(--accent-green);">ZERO DATA LEAKAGE GUARANTEED</span>
+                        <span class="badge-tag" style="background: rgba(139, 92, 246, 0.15); border-color: var(--accent-purple); color: var(--accent-purple);">CHRONOLOGICAL ROLLING FORWARD</span>
+                    </div>
+                    <h2 class="lab-main-title">FORECAST IMPROVEMENT LAB</h2>
+                    <p class="lab-subtitle">Progressive Model Selection, Chronological Rolling Backtesting, 11-Feature Discovery & Same-Horizon Ensembles</p>
+                </div>
+                <div class="lab-header-actions">
+                    <button type="button" class="btn btn-primary-gradient btn-lg" id="btn-run-improvement-lab">
+                        <span class="btn-icon">🚀</span> RUN COMPLETE IMPROVEMENT LAB
+                    </button>
+                </div>
+            </div>
+
+            <!-- Configuration & Control Toolbar -->
+            <div class="lab-controls-panel">
+                <div class="lab-control-group">
+                    <label for="select-lab-forecast-run">Forecast Run:</label>
+                    <select id="select-lab-forecast-run" class="lab-ctrl-select">
+                        <option value="RUN-CURRENT">Current Session Active Run</option>
+                    </select>
+                </div>
+                <div class="lab-control-group">
+                    <label for="select-lab-symbol">Symbol:</label>
+                    <select id="select-lab-symbol" class="lab-ctrl-select">
+                        <option value="HG">HG (High Grade Copper)</option>
+                    </select>
+                </div>
+                <div class="lab-control-group">
+                    <label for="select-lab-role">Role:</label>
+                    <select id="select-lab-role" class="lab-ctrl-select">
+                        <option value="Primary">Primary</option>
+                    </select>
+                </div>
+                <div class="lab-control-group">
+                    <label for="select-lab-packing">Packing:</label>
+                    <select id="select-lab-packing" class="lab-ctrl-select">
+                        <option value="Standard">Standard</option>
+                    </select>
+                </div>
+                <div class="lab-control-group">
+                    <label for="select-lab-horizon">Horizon:</label>
+                    <select id="select-lab-horizon" class="lab-ctrl-select">
+                        <option value="all">All Horizons (1→7 to 1→90)</option>
+                        <option value="7">1→7 Days</option>
+                        <option value="15">1→15 Days</option>
+                        <option value="30">1→30 Days</option>
+                        <option value="60">1→60 Days</option>
+                        <option value="90">1→90 Days</option>
+                    </select>
+                </div>
+                <div class="lab-control-group">
+                    <label for="select-lab-top-models">Top Models:</label>
+                    <select id="select-lab-top-models" class="lab-ctrl-select">
+                        <option value="3" selected>Top 3</option>
+                        <option value="4">Top 4</option>
+                        <option value="5">Top 5</option>
+                    </select>
+                </div>
+                <div class="lab-control-group">
+                    <label for="select-lab-primary-metric">Primary Metric:</label>
+                    <select id="select-lab-primary-metric" class="lab-ctrl-select">
+                        <option value="MAE" selected>MAE</option>
+                        <option value="RMSE">RMSE</option>
+                        <option value="Directional Accuracy">Directional Accuracy</option>
+                        <option value="Error Std Dev">Error Std Dev</option>
+                        <option value="Mean Bias">Mean Bias</option>
+                        <option value="sMAPE">sMAPE</option>
+                        <option value="R2">R²</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Actual Data Coverage & Alignment Banner -->
+            <div id="lab-actual-coverage-banner" class="lab-coverage-card">
+                <div class="lab-cov-metrics">
+                    <div class="cov-item">
+                        <span class="cov-label">Forecast Rows</span>
+                        <span class="cov-value" id="lab-cov-forecast-rows">--</span>
+                    </div>
+                    <div class="cov-item">
+                        <span class="cov-label">Actual Rows</span>
+                        <span class="cov-value" id="lab-cov-actual-rows">--</span>
+                    </div>
+                    <div class="cov-item">
+                        <span class="cov-label">Matched Rows</span>
+                        <span class="cov-value" id="lab-cov-matched-rows">--</span>
+                    </div>
+                    <div class="cov-item">
+                        <span class="cov-label">Unmatched Rows</span>
+                        <span class="cov-value" id="lab-cov-unmatched-rows">--</span>
+                    </div>
+                    <div class="cov-item">
+                        <span class="cov-label">Coverage %</span>
+                        <span class="cov-value" id="lab-cov-pct">--%</span>
+                    </div>
+                </div>
+                <div class="cov-status-badge" id="lab-cov-warning" style="display: none;">
+                    <span class="status-indicator"></span> <span id="lab-cov-warning-text">Insufficient actual coverage warning</span>
+                </div>
+            </div>
+
+            <!-- Execution Tracker & Progress Bar -->
+            <div id="lab-progress-container" class="lab-progress-container" style="display: none;">
+                <div class="lab-progress-header">
+                    <div class="lab-progress-title">
+                        <span class="pulse-dot"></span>
+                        <span id="lab-current-task">Executing 28-Step Improvement Pipeline...</span>
+                    </div>
+                    <div class="tracker-counter font-mono" id="lab-progress-pct">0.0%</div>
+                </div>
+
+                <div class="progress-bar-wrapper">
+                    <div class="progress-bar-fill" id="lab-progress-bar-inner" style="width: 0%;"></div>
+                </div>
+
+                <div class="lab-telemetry-grid">
+                    <div class="lab-telemetry-item">
+                        <span class="telem-label">Current Model:</span>
+                        <span class="telem-val" id="lab-current-model">--</span>
+                    </div>
+                    <div class="lab-telemetry-item">
+                        <span class="telem-label">Current Horizon:</span>
+                        <span class="telem-val" id="lab-current-horizon">--</span>
+                    </div>
+                    <div class="lab-telemetry-item">
+                        <span class="telem-label">Experiments:</span>
+                        <span class="telem-val" id="lab-current-counter">0 / 0</span>
+                    </div>
+                </div>
+
+                <!-- 28-Step Interactive Pipeline Stepper -->
+                <div class="lab-stepper-wrapper">
+                    <div class="lab-stepper-title" style="font-size: 0.72rem; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase;">28-Stage Execution Pipeline:</div>
+                    <div class="lab-stepper-track" id="lab-stepper-container">
+                        <!-- Populated by initStepperPills() -->
+                    </div>
+                </div>
+
+                <!-- Resilient Error Notification Alert -->
+                <div id="lab-error-alert" class="lab-error-alert" style="display: none;">
+                    <span id="lab-error-msg">⚠️ Pipeline notice: A non-fatal experiment error occurred.</span>
+                    <button type="button" class="btn btn-outline btn-xs" id="btn-retry-failed-experiments">Retry Failed</button>
+                </div>
+            </div>
+
+            <!-- Analytical Workspace: 9 Dedicated Tabs -->
+            <div class="lab-workspace-panel" id="lab-workspace-panel">
+                <nav class="lab-tabs-nav" id="lab-tabs-nav" role="tablist" aria-label="Improvement Lab Tabs">
+                    <button type="button" class="lab-tab-btn active" id="tab-btn-lab-overview" data-pane="overview" role="tab" aria-selected="true">1. Overview</button>
+                    <button type="button" class="lab-tab-btn" data-pane="progressive" role="tab" aria-selected="false">2. Progressive Selection</button>
+                    <button type="button" class="lab-tab-btn" data-pane="backtest" role="tab" aria-selected="false">3. Rolling Backtest</button>
+                    <button type="button" class="lab-tab-btn" data-pane="feature" role="tab" aria-selected="false">4. Feature Lab</button>
+                    <button type="button" class="lab-tab-btn" data-pane="dependency" role="tab" aria-selected="false">5. Feature Dependency</button>
+                    <button type="button" class="lab-tab-btn" data-pane="ablation" role="tab" aria-selected="false">6. Ablation Study</button>
+                    <button type="button" class="lab-tab-btn" data-pane="modelfeat" role="tab" aria-selected="false">7. Model × Features</button>
+                    <button type="button" class="lab-tab-btn" data-pane="ensemble" role="tab" aria-selected="false">8. Same-Horizon Ensemble</button>
+                    <button type="button" class="lab-tab-btn" data-pane="recommendation" role="tab" aria-selected="false">9. Final Recommendation & V2</button>
+                </nav>
+
+                <div class="lab-panes-container">
+                    <!-- TAB 1: OVERVIEW -->
+                    <div class="lab-pane active" id="lab-pane-overview" role="tabpanel">
+                        <div class="pane-kpi-grid">
+                            <div class="pane-kpi-card">
+                                <span class="kpi-lbl">Best Model</span>
+                                <span class="kpi-val text-cyan" id="kpi-best-model">--</span>
+                                <span class="kpi-sub" id="kpi-best-model-sub">Awaiting run</span>
+                            </div>
+                            <div class="pane-kpi-card">
+                                <span class="kpi-lbl">Best Feature Set</span>
+                                <span class="kpi-val text-purple" id="kpi-best-feat">--</span>
+                                <span class="kpi-sub" id="kpi-best-feat-sub">Optimized 11-feature subset</span>
+                            </div>
+                            <div class="pane-kpi-card">
+                                <span class="kpi-lbl">Best Horizon</span>
+                                <span class="kpi-val text-amber" id="kpi-best-horizon">--</span>
+                                <span class="kpi-sub" id="kpi-best-horizon-sub">Peak edge horizon</span>
+                            </div>
+                            <div class="pane-kpi-card">
+                                <span class="kpi-lbl">MAE Improvement</span>
+                                <span class="kpi-val text-green" id="kpi-mae-imp">--%</span>
+                                <span class="kpi-sub" id="kpi-mae-imp-sub">Baseline vs Optimized V2</span>
+                            </div>
+                            <div class="pane-kpi-card">
+                                <span class="kpi-lbl">RMSE Improvement</span>
+                                <span class="kpi-val text-green" id="kpi-rmse-imp">--%</span>
+                                <span class="kpi-sub" id="kpi-rmse-imp-sub">Out-of-sample reduction</span>
+                            </div>
+                            <div class="pane-kpi-card">
+                                <span class="kpi-lbl">Directional Accuracy Δ</span>
+                                <span class="kpi-val text-green" id="kpi-dir-imp">+--%</span>
+                                <span class="kpi-sub" id="kpi-dir-imp-sub">Trend regime matching boost</span>
+                            </div>
+                        </div>
+
+                        <div class="pane-charts-grid">
+                            <div class="pane-chart-box">
+                                <div class="chart-box-title">MAE: Baseline vs Improved Model ($/lb)</div>
+                                <div class="chart-canvas-box">
+                                    <canvas id="chart-lab-mae-comp"></canvas>
+                                </div>
+                            </div>
+                            <div class="pane-chart-box">
+                                <div class="chart-box-title">RMSE: Baseline vs Improved Model ($/lb)</div>
+                                <div class="chart-canvas-box">
+                                    <canvas id="chart-lab-rmse-comp"></canvas>
+                                </div>
+                            </div>
+                            <div class="pane-chart-box">
+                                <div class="chart-box-title">Directional Accuracy: Before vs After (%)</div>
+                                <div class="chart-canvas-box">
+                                    <canvas id="chart-lab-dir-comp"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 2: PROGRESSIVE MODEL SELECTION -->
+                    <div class="lab-pane" id="lab-pane-progressive" role="tabpanel">
+                        <div class="lab-section-desc" style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 16px;">
+                            Strict progressive selection funnel: All 9 models enter at 1→7 Days, top 3–5 models advance to 1→15, top 3 carry forward to 1→30, 1→60, and 1→90 Days.
+                        </div>
+                        
+                        <div class="funnel-container" id="lab-funnel-container">
+                            <!-- Populated by renderLabTab2Progressive() -->
+                        </div>
+
+                        <div class="deep-analysis-card" style="margin-top: 24px;">
+                            <div class="deep-card-header">
+                                <span class="deep-badge">FINALISTS</span>
+                                <h3>DEEP ANALYSIS CANDIDATE MODELS</h3>
+                            </div>
+                            <div class="deep-models-grid" id="lab-deep-models-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;">
+                                <!-- Populated with Top 2 models -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 3: ROLLING-FORWARD BACKTEST -->
+                    <div class="lab-pane" id="lab-pane-backtest" role="tabpanel">
+                        <div class="lab-section-desc" style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 16px;">
+                            True chronological rolling-forward backtesting across 5 historical folds. Strict temporal order preserved; no random shuffling or future leakage.
+                        </div>
+
+                        <div class="lab-rolling-stats-grid" id="lab-backtest-kpis">
+                            <!-- Populated by renderLabTab3Backtest() -->
+                        </div>
+
+                        <div class="lab-table-card" style="margin-bottom: 24px;">
+                            <div class="lab-table-header">
+                                <h4 style="font-size: 0.85rem; font-weight: 700; color: #ffffff;">Chronological Folds Performance Table</h4>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Fold #</th>
+                                            <th>Train Period</th>
+                                            <th>Validation Period</th>
+                                            <th>MAE</th>
+                                            <th>RMSE</th>
+                                            <th>MAPE</th>
+                                            <th>Directional Accuracy</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="lab-backtest-tbody">
+                                        <tr><td colspan="7" class="text-center">Awaiting rolling backtest results.</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="pane-chart-box">
+                            <div class="chart-box-title">Chronological Folds: MAE & Directional Accuracy Trajectory</div>
+                            <div class="chart-canvas-box" style="height: 240px;">
+                                <canvas id="chart-lab-backtest-folds"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 4: FEATURE LAB -->
+                    <div class="lab-pane" id="lab-pane-feature" role="tabpanel">
+                        <!-- Human-Readable Summary Banner -->
+                        <div class="feature-contrib-summary-cards" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px;">
+                            <div class="feat-summary-col">
+                                <div class="feat-sum-header green">Strong Contributors</div>
+                                <div class="feat-sum-body" id="lab-strong-contributors">--</div>
+                            </div>
+                            <div class="feat-summary-col">
+                                <div class="feat-sum-header blue">Medium Contributors</div>
+                                <div class="feat-sum-body" id="lab-medium-contributors">--</div>
+                            </div>
+                            <div class="feat-summary-col">
+                                <div class="feat-sum-header amber">Low Contributors</div>
+                                <div class="feat-sum-body" id="lab-low-contributors">--</div>
+                            </div>
+                            <div class="feat-summary-col">
+                                <div class="feat-sum-header red">Unused / Ineffective</div>
+                                <div class="feat-sum-body" id="lab-unused-contributors">--</div>
+                            </div>
+                        </div>
+
+                        <!-- 11 Feature Participation Matrix -->
+                        <div class="lab-table-card">
+                            <div class="lab-table-header">
+                                <h4 style="font-size: 0.85rem; font-weight: 700; color: #ffffff;">11-Feature Participation & Impact Matrix</h4>
+                                <span class="hint-text" style="font-size: 0.72rem; color: var(--text-muted);">Click any row or 'Why?' for statistical rationale</span>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="data-table interactive-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Feature</th>
+                                            <th>Participation Level</th>
+                                            <th>Selection %</th>
+                                            <th>Avg Impact</th>
+                                            <th>Median Impact</th>
+                                            <th>Ablation Impact</th>
+                                            <th>Model Cov.</th>
+                                            <th>Horizon Cov.</th>
+                                            <th>Stability</th>
+                                            <th>Final Decision</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="lab-participation-tbody">
+                                        <tr><td colspan="11" class="text-center">Run the Improvement Lab to populate 11-feature participation.</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 5: FEATURE DEPENDENCY & HEATMAP -->
+                    <div class="lab-pane" id="lab-pane-dependency" role="tabpanel">
+                        <div class="lab-section-desc" style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 16px;">
+                            Feature pairwise correlation, collinear redundancy, and complementary prediction benefit across the 11 macroeconomic & price lag features.
+                        </div>
+
+                        <div class="lab-table-card" style="margin-bottom: 24px;">
+                            <div class="lab-table-header">
+                                <h4 style="font-size: 0.85rem; font-weight: 700; color: #ffffff;">11 × 11 Feature Correlation & Redundancy Matrix</h4>
+                            </div>
+                            <div class="heatmap-grid" id="lab-heatmap-grid" style="display: grid; gap: 2px; padding: 12px; background: rgba(0,0,0,0.2); border-radius: 6px;">
+                                <!-- Populated dynamically with cells -->
+                            </div>
+                        </div>
+
+                        <div class="lab-table-card">
+                            <div class="lab-table-header">
+                                <h4 style="font-size: 0.85rem; font-weight: 700; color: #ffffff;">Feature Dependency Pairs & Redundancy</h4>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Feature A</th>
+                                            <th>Feature B</th>
+                                            <th>Correlation</th>
+                                            <th>Redundancy</th>
+                                            <th>Combined Benefit</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="lab-dependency-tbody"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 6: ABLATION STUDY -->
+                    <div class="lab-pane" id="lab-pane-ablation" role="tabpanel">
+                        <div class="lab-section-desc" style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 16px;">
+                            Full Model vs Full Model without Feature X: Rigorous rolling out-of-sample confirmation of actual marginal predictive value.
+                        </div>
+
+                        <div class="lab-table-card">
+                            <div class="lab-table-header">
+                                <h4 style="font-size: 0.85rem; font-weight: 700; color: #ffffff;">Rolling Out-of-Sample Feature Ablation Leaderboard</h4>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Feature</th>
+                                            <th>Full Model MAE</th>
+                                            <th>Without Feature MAE</th>
+                                            <th>MAE Delta</th>
+                                            <th>Full RMSE</th>
+                                            <th>Without Feature RMSE</th>
+                                            <th>RMSE Delta</th>
+                                            <th>Dir. Acc Delta</th>
+                                            <th>Fold Consistency</th>
+                                            <th>Decision</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="lab-ablation-tbody">
+                                        <tr><td colspan="10" class="text-center">Awaiting feature ablation results.</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 7: MODEL × FEATURE EXPERIMENTS -->
+                    <div class="lab-pane" id="lab-pane-modelfeat" role="tabpanel">
+                        <div class="lab-filter-row" style="display: flex; gap: 14px; margin-bottom: 16px; flex-wrap: wrap;">
+                            <div class="filter-item">
+                                <label style="font-size: 0.75rem; color: var(--text-muted);">Filter Horizon:</label>
+                                <select id="lab-filter-modelfeat-horizon" class="lab-ctrl-select">
+                                    <option value="ALL">All Horizons</option>
+                                    <option value="7">1→7D</option>
+                                    <option value="15">1→15D</option>
+                                    <option value="30">1→30D</option>
+                                    <option value="60">1→60D</option>
+                                    <option value="90">1→90D</option>
+                                </select>
+                            </div>
+                            <div class="filter-item">
+                                <label style="font-size: 0.75rem; color: var(--text-muted);">Filter Model:</label>
+                                <select id="lab-filter-modelfeat-model" class="lab-ctrl-select">
+                                    <option value="ALL">All Models</option>
+                                    <option value="XGBoost">XGBoost</option>
+                                    <option value="LightGBM">LightGBM</option>
+                                    <option value="CatBoost">CatBoost</option>
+                                    <option value="RandomForest">RandomForest</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="lab-table-card">
+                            <div class="lab-table-header">
+                                <h4 style="font-size: 0.85rem; font-weight: 700; color: #ffffff;">Model × Feature Set Combinations Leaderboard</h4>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Rank</th>
+                                            <th>Horizon</th>
+                                            <th>Model</th>
+                                            <th>Feature Set</th>
+                                            <th>Features</th>
+                                            <th>MAE</th>
+                                            <th>RMSE</th>
+                                            <th>MAPE</th>
+                                            <th>R²</th>
+                                            <th>Dir. Accuracy</th>
+                                            <th>Stability</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="lab-modelfeat-tbody">
+                                        <tr><td colspan="11" class="text-center">Awaiting experiment evaluation.</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 8: SAME-HORIZON ENSEMBLE LAB -->
+                    <div class="lab-pane" id="lab-pane-ensemble" role="tabpanel">
+                        <div class="lab-ensemble-alert">
+                            <div class="alert-icon">🛡️</div>
+                            <div class="alert-text">
+                                <strong>Strict Same-Horizon Invariant Enforced:</strong> Models are only combined when they belong to the exact same forecast horizon. Cross-horizon ensembles are mathematically barred. Ensembles must demonstrably beat the best individual model out-of-sample to achieve ACCEPTED status.
+                            </div>
+                        </div>
+
+                        <div class="lab-table-card">
+                            <div class="lab-table-header">
+                                <h4 style="font-size: 0.85rem; font-weight: 700; color: #ffffff;">Same-Horizon Model Ensembles & Diversity Analysis</h4>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Horizon</th>
+                                            <th>Ensemble Architecture</th>
+                                            <th>Optimized Weights</th>
+                                            <th>Best Indiv. MAE</th>
+                                            <th>Ensemble MAE</th>
+                                            <th>MAE Improvement</th>
+                                            <th>Pred. Corr</th>
+                                            <th>Error Corr</th>
+                                            <th>Dir. Agreement</th>
+                                            <th>Status</th>
+                                            <th>Evaluation Reason</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="lab-ensemble-tbody">
+                                        <tr><td colspan="11" class="text-center">Ensembles will be evaluated after individual model and feature optimization completes.</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 9: FINAL RECOMMENDATION & V2 APPROVAL -->
+                    <div class="lab-pane" id="lab-pane-recommendation" role="tabpanel">
+                        <div class="version-approval-strip" style="display: flex; justify-content: space-between; align-items: center; background: var(--bg-secondary); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 18px 24px; margin-bottom: 20px;">
+                            <div class="version-meta-card">
+                                <div class="vmeta-badge">CANDIDATE VERSION</div>
+                                <h3 id="lab-run-version-id" style="font-size: 1.25rem; font-weight: 800; color: var(--text-primary); margin: 0;">MODEL VERSION V2</h3>
+                                <div class="vmeta-details" style="font-size: 0.78rem; color: var(--text-muted);">
+                                    Zero Data Leakage Certified • Audited Chronological Backtest
+                                </div>
+                            </div>
+                            <div class="version-action-box" style="display: flex; align-items: center; gap: 12px;">
+                                <span class="approval-badge-confirmed" id="lab-approved-badge" style="display: none;">
+                                    ✓ CERTIFIED & ARCHIVED AS V2
+                                </span>
+                                <button type="button" class="btn btn-primary-gradient btn-lg" id="btn-approve-model-version">
+                                    <span class="btn-icon">✓</span> APPROVE MODEL VERSION (V2)
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="recommendations-cards-grid" id="lab-recommendations-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+                            <!-- Populated with recommendations for 1->7, 1->15, 1->30, 1->60, 1->90 -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- "Why Was This Feature Kept/Removed?" Explanatory Drawer -->
+            <div class="card-expand-modal-backdrop" id="lab-feature-detail-drawer" role="dialog" aria-modal="true" style="display: none;">
+                <div class="card-expand-modal-dialog" style="max-width: 620px;">
+                    <div id="lab-feature-detail-content" style="padding: 24px;">
+                        <!-- Populated by showFeatureDetailDrawer() -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Dedicated Result Card Expansion Modal -->
-        <div class="card-expand-modal-backdrop" id="card-expand-modal" style="display: none;">
+        <div class="card-expand-modal-backdrop" id="card-expand-modal" role="dialog" aria-modal="true" aria-labelledby="modal-model-name" style="display: none;">
             <div class="card-expand-modal-dialog">
                 <div class="modal-card-header">
                     <div class="modal-header-left">
@@ -776,6 +1430,9 @@
             </div>
         </div>
 
+
+        <!-- Footer -->
+
         <!-- Footer -->
         <footer class="app-footer">
             <div>Institutional Multi-Horizon Direct Forecasting Engine • Zero Data Leakage Certified</div>
@@ -783,6 +1440,50 @@
         </footer>
     </div>
 
-    <script src="app.js?v=5"></script>
+    <!-- UI Enhancement (Added) — Usability Layer: First-run Guided Walkthrough -->
+    <div class="walkthrough-overlay" id="walkthrough-overlay" style="display: none;">
+        <div class="walkthrough-card" id="walkthrough-card">
+            <div class="walkthrough-header">
+                <span class="walkthrough-badge" id="wt-step-badge">Step 1 of 3</span>
+                <button type="button" class="walkthrough-close" id="btn-wt-close" title="Close walkthrough">✕</button>
+            </div>
+            <div class="walkthrough-body">
+                <h4 id="wt-title">1. Select Forecasting Models</h4>
+                <p id="wt-desc">Choose from 9 institutional econometric and gradient boosted models. You can select all or evaluate individual architectures.</p>
+            </div>
+            <div class="walkthrough-footer">
+                <label class="wt-dont-show">
+                    <input type="checkbox" id="chk-wt-dont-show"> Don't show again
+                </label>
+                <div class="wt-btn-group">
+                    <button type="button" class="btn btn-outline btn-sm" id="btn-wt-skip">Skip Tour</button>
+                    <button type="button" class="btn btn-primary btn-sm" id="btn-wt-next">Next ›</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- UI Enhancement (Added) — Usability Layer: Save Custom Preset Modal -->
+    <div class="card-expand-modal-backdrop" id="save-preset-modal" role="dialog" aria-modal="true" aria-labelledby="preset-modal-title" style="display: none;">
+        <div class="card-expand-modal-dialog" style="max-width: 480px;">
+            <div class="modal-card-header">
+                <div class="modal-header-left">
+                    <span class="modal-model-badge" id="preset-modal-title">Save Configuration as Preset</span>
+                </div>
+                <button type="button" class="modal-close-btn" id="btn-close-preset-modal">✕</button>
+            </div>
+            <div class="modal-card-body" style="padding: 20px;">
+                <label style="display: block; margin-bottom: 8px; color: var(--text-secondary); font-size: 0.85rem;">Preset Name:</label>
+                <input type="text" id="input-preset-name" class="lab-ctrl-select" style="width: 100%; margin-bottom: 16px;" placeholder="e.g. My Fast Swing Setup" value="Custom Run Preset">
+                <div id="preset-preview-summary" style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 20px;"></div>
+                <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                    <button type="button" class="btn btn-outline btn-sm" id="btn-cancel-save-preset">Cancel</button>
+                    <button type="button" class="btn btn-primary btn-sm" id="btn-confirm-save-preset">Save Preset</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js?v=9"></script>
 </body>
 </html>

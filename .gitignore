@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+catboost_info/
+
+# Environments
+.venv/
+venv/
+ENV/
+env/
+
+# Database & SQLite local state
+*.db
+*.sqlite3
+*.db-journal
+
+# System & IDE
+.idea/
+.vscode/
+.gemini/
+*.log
+*.tmp
+
+# Uploads & Temp Data
+custom_market_data.csv

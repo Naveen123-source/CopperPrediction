@@ -232,6 +232,31 @@ class ForecastingPipeline:
                 self.active_jobs[job_id]["results"] = all_results
                 self.results_cache[job_id] = all_results
                 
+                # Persist to SQLite so Improvement Lab and historical queries have full access
+                try:
+                    from improvement_lab import save_forecast_run
+                    max_h = max(selected_horizons) if selected_horizons else 0
+                    is_continuous = len(selected_horizons) > 6 or (selected_horizons and selected_horizons == list(range(min(selected_horizons), max_h + 1)))
+                    if is_continuous:
+                        range_label = f"1 to {max_h} Days"
+                    elif max_h == 90:
+                        range_label = "Fixed Horizons (up to 90D)"
+                    else:
+                        range_label = "Fixed Horizons"
+                    
+                    save_forecast_run(
+                        job_id=job_id,
+                        results=all_results,
+                        horizon_mode="continuous" if is_continuous else "fixed",
+                        range_label=range_label,
+                        models=selected_models,
+                        horizons=selected_horizons,
+                        ratios=selected_ratios,
+                        metrics=selected_metrics
+                    )
+                except Exception as db_err:
+                    print(f"Warning: Failed to save forecast run to SQLite: {db_err}")
+                
             elapsed = round(time.time() - start_time, 2)
             self.active_jobs[job_id]["elapsed_seconds"] = elapsed
             
